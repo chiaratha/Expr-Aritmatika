@@ -1,1 +1,72 @@
+/*  Chiara Thalita Diva Permatasari 2057051007
+    Thalia Gemi Innaya 2017051025               */
 
+
+#include <bits/stdc++.h>
+using namespace std;
+
+long unsigned int t;
+
+bool Symbol(char a){
+    if(a=='*' || a=='/' || a=='+' ||a=='-' || a=='%'){
+        return true; 
+    }else{    
+        return false; 
+    }
+}
+
+int parse(char a){ 
+    if(a=='+' || a=='-'){ 
+        return 1; 
+    }
+    if(a=='*' || a=='/' || a=='%'){ 
+        return 2; 
+    } 
+    return 0;
+}
+
+double applyOpr(double satu, double dua, char opr){
+    switch(opr){
+    case '*': return satu * dua;    
+    case '/': return satu / dua; 
+    case '+': return satu + dua; 
+    case '-': return satu - dua;
+    }
+return 0;
+}
+
+void hasil(string in){
+    stack<double> data;
+    stack<char>operasi;
+
+    for(t=0; t<in.length(); t++){
+        if(isdigit(in[t])){
+            int nilai=0;
+            while(t<in.length() && isdigit(in[t])){
+                nilai = (nilai*10) + (in[t] - '0');
+                t++;
+            }
+            t--;
+            data.push(nilai);
+        }
+            else if(in[t] == '(')
+                operasi.push(in[t]);
+            else if(in[t] == ')'){
+                while(!operasi.empty() && operasi.top() != '('){
+                    if(operasi.top() == '%'){
+                        int kedua = data.top(); data.pop();
+                        int pertama  = data.top(); data.pop();
+                        operasi.pop();
+                        data.push(pertama %kedua);
+                        
+                    }else{
+                        double kedua = data.top(); data.pop();
+                        double pertama  = data.top(); data.pop();
+                        char opr = operasi.top(); operasi.pop();
+                        data.push(applyOpr(pertama , kedua, opr));
+                    }
+                }
+                
+                if(!operasi.empty())
+                    operasi.pop();
+                    
