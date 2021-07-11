@@ -150,3 +150,57 @@ string Postfix(vector<string> _infix)
 
     return postfixData;
 }
+
+vector<string> Separating(string _input){
+    vector<string> sprtd;
+    string data;
+    bool isAngkaEnd = false;
+
+    int a = 0;
+
+    char cAngka[] = "0123456789";
+    char cOperator[] = "(+-/%*";
+    char chr[1];
+    
+    while(_input[a] != '\0'){
+        chr[0] = _input[a];
+
+        if(strspn(chr, cAngka) && chr[0] != ' '){
+            data += _input[a];
+            isAngkaEnd = true;
+
+            if((unsigned)a == strlen(_input.c_str()) - 1){
+                sprtd.push_back(data);
+            }
+        }else if(chr[0] != ' '){
+            if(isAngkaEnd){
+                sprtd.push_back(data);
+                isAngkaEnd = false;
+            }
+
+            data = _input[a];
+            sprtd.push_back(data);
+
+            data = "";
+
+            if(a > 0){
+                chr[0] = _input[a - 1];
+
+                if(_input[a] != '(' && strspn(chr, cOperator)){
+                    sprtd.push_back("1");
+                    sprtd.push_back("*");
+                }
+            }
+        }
+
+        a++;
+    }
+    
+    return sprtd;
+}
+
+int main(){
+    string input;
+    getline(cin, input);     
+    cout << Postfix(Separating(input)) << endl;
+}
