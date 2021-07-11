@@ -55,3 +55,98 @@ int Priority (char _alpha)
 
     return 0;
 }
+
+string Postfix(vector<string> _infix)
+{
+    vector<string> postfix;
+    string postfixData, data;
+
+    int a = 0;
+
+    char cAngka[] = "0123456789";
+    char cOperator[] = "()+-/%*";
+
+    for(auto sprtd : _infix){
+        char chr[strlen(sprtd.c_str())];
+        strcpy(chr, sprtd.c_str());
+
+        if(strspn(chr, cAngka)){
+            data += sprtd;
+            postfix.push_back(data);
+            data = "";
+        }else if(chr[0] == '('){
+            Push(chr[0]);
+        }else if(chr[0] == ')'){
+            while(stk[top] != '('){
+                data = Pop();
+                postfix.push_back(data);
+                data = "";
+            }
+
+            Pop();
+        }else{
+            bool skip = false;
+
+            if((unsigned)a != _infix.size() && chr[0] == '-'){
+                char nextChr[strlen(_infix[a + 1].c_str())];
+                strcpy(nextChr, _infix[a + 1].c_str());
+
+                if(a > 0){
+                    char prevChr[strlen(_infix[a - 1].c_str())];
+                    strcpy(prevChr, _infix[a - 1].c_str());
+                    
+                    if(strspn(prevChr, cOperator)){
+                        data = sprtd;
+                        skip = true;
+                    }
+                }else if(strspn(nextChr, cAngka)){
+                    data = sprtd;
+                    skip = true;
+                }
+            }
+
+            if(top == -1 && !skip){
+                Push(chr[0]);
+            }else if(Priority(chr[0]) <= Priority(stk[top]) && !skip){
+                data = Pop();
+                postfix.push_back(data);
+            
+                while(Priority(stk[top]) == Priority(chr[0])){
+                    data = Pop();
+                    postfix.push_back(data);
+
+                    if(top < 0) {
+                        break;
+                    }
+                }
+
+                data = "";
+                Push(chr[0]);
+            }else if(Priority(chr[0]) > Priority(stk[top]) && !skip){
+                Push(chr[0]);
+            }
+        }
+
+        a++;
+    }
+
+    while(top != -1)
+    {
+        data = Pop();
+        postfix.push_back(data);
+    }
+
+    a = 0;
+
+    for(auto x : postfix){
+        postfixData += x;
+        
+        if((unsigned)a != postfix.size()){
+            postfixData += " ";
+        }
+
+        a++;
+    }
+
+    return postfixData;
+}
