@@ -70,3 +70,93 @@ void hasil(string in){
                 if(!operasi.empty())
                     operasi.pop();
                     
+}else{
+                if(in[t] == '-'){
+                    if(t==0){
+                        if(isdigit(in[t+1])){
+                            t++;
+                            int nilai=0;
+                            while(t<in.length() && isdigit(in[t])){
+                                nilai = (nilai*10) + (in[t] - '0');
+                                t++;
+                            }
+                            t--;
+                            data.push(nilai*-1);
+                        }else{
+                            data.push(-1);
+                            operasi.push('*');
+                        }
+                        
+                    }else{
+                        while(!operasi.empty() && parse(operasi.top()) >= parse(in[t]) && !Symbol(in[t-1])){
+                            if(operasi.top() == '%'){
+                                int kedua = data.top(); data.pop();
+                                int pertama  = data.top(); data.pop();
+                                operasi.pop();
+                                data.push(pertama %kedua);
+                            
+                            }else{
+                                double kedua = data.top(); data.pop();
+                                double pertama  = data.top(); data.pop();
+                                char opr = operasi.top(); operasi.pop();
+                                data.push(applyOpr(pertama , kedua, opr));
+                            }
+                        }
+                        if((isdigit(in[t+1]) || in[t+1]=='(') && (isdigit(in[t-1]) || in[t-1]==')'))
+                            operasi.push(in[t]);
+                        
+                        else{
+                            data.push(-1);
+                            operasi.push('*');
+                        }
+                    } 
+                    
+                }else{
+                    while(!operasi.empty() && parse(operasi.top()) >= parse(in[t])){
+                        if(operasi.top() == '%'){
+                            int kedua = data.top(); data.pop();
+                            int pertama  = data.top(); data.pop();
+                            operasi.pop();
+                            data.push(pertama %kedua);
+                        }else{
+                            double kedua = data.top(); data.pop();
+                            double pertama  = data.top(); data.pop();
+                            char opr = operasi.top(); operasi.pop();
+                            data.push(applyOpr(pertama , kedua, opr));
+                        }
+                    }
+                    operasi.push(in[t]);
+                }
+            }
+        }
+        
+        while(!operasi.empty()){
+            if(operasi.top() == '%'){
+                int kedua = data.top(); data.pop();
+                int pertama  = data.top(); data.pop();
+                operasi.pop();
+                data.push(pertama %kedua);
+         
+            }else{
+                double kedua = data.top(); data.pop();
+                double pertama  = data.top(); data.pop();
+                char opr = operasi.top(); operasi.pop();
+                data.push(applyOpr(pertama , kedua, opr));
+            }
+        }
+        cout << data.top() << endl;
+    }
+
+int main(){
+    string ekspresi; getline(cin,ekspresi);
+    string baru_ekspresi="";
+    for(t=0;t<ekspresi.length();t++){
+        if(ekspresi[t]==' ')
+            continue;
+        else
+            baru_ekspresi+=ekspresi[t];
+    }
+    hasil(baru_ekspresi);
+
+    return 0;
+}
