@@ -1,5 +1,57 @@
 //Chiara Thalita Diva Permatasari 2057051007
 //Thalia Gemi Innaya 2017051025
-
-#include<iostream>
+                         //parsing string infix//
+#include <vector>
+#include <cstring>
 using namespace std;
+
+void Separating(string _input)
+{
+
+
+    char cAngka[] = "0123456789";
+    char cOperator[] = "+-/%*";
+    char cSpace[] = "()";
+    char chr[1];
+    
+    for(auto charInput : _input){
+        chr[0] = charInput;
+
+        if(strspn(chr, cOperator) || strspn(chr, cAngka) || strspn(chr, cSpace)){
+            sprtd.push_back(charInput);
+        }
+    }
+    
+    for (int a = 0; a != sprtd.size(); a++){    
+        chr[0] = sprtd[a];
+
+        if((strspn(chr, cOperator) || sprtd[a] == ')') && sprtd[a] != '(' && a > 0){
+            data += " ";
+        }
+        
+        if(strspn(chr, cAngka)){
+            data += sprtd[a];
+        }else{
+            data += sprtd[a];
+
+            if(a > 0){
+                chr[0] = sprtd[a - 1];
+
+                if(sprtd[a] != '(' && strspn(chr, cOperator)){
+                    data += "1 * ";
+                }else if(sprtd[a] != ')'){
+                    chr[0] = sprtd[a + 1];
+
+                    if(!strspn(chr, cOperator)){
+                        data += " ";
+                    }
+                }
+            }else if(sprtd[a + 1] == '('){
+                data += "1 * ";                
+            }
+        }
+    }
+    
+    cout << data << endl;
+}
+
