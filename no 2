@@ -1,2 +1,57 @@
 /*  Chiara Thalita Diva Permatasari 2057051007
     Thalia Gemi Innaya 2017051025               */
+#include <iostream>
+#include <cstring>
+#include <vector>
+#define MAX 20
+
+using namespace std;
+
+char stk[MAX];
+int top = -1;
+
+bool IsFull(){
+    return top == MAX - 1;
+}
+
+bool IsEmpty(){
+    return top == -1;
+}
+
+void Push(char _ch)
+{
+    if(!IsFull())
+    {
+        stk[++top] = _ch;
+    }
+}
+
+char Pop()
+{
+    char ch;
+
+    if(!IsEmpty())
+    {
+        ch = stk[top];
+        stk[top] = '\0';
+        top--;
+        return(ch);
+    }
+
+    return 0;
+}
+
+int Priority (char _alpha)
+{
+    if(_alpha == '+' || _alpha =='-')
+    {
+        return(1);
+    }
+ 
+    if(_alpha == '*' || _alpha =='/' || _alpha == '%')
+    {
+        return(2);
+    }
+
+    return 0;
+}
