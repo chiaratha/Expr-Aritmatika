@@ -1,15 +1,18 @@
 //Chiara Thalita Diva Permatasari 2057051007
 //Thalia Gemi Innaya 2017051025
+                         
                          //parsing string infix//
+                         
 #include <vector>
 #include <cstring>
 using namespace std;
 
 void Separating(string _input)
 {
+vector<char> sprtd;
+string data;
 
-
-    char cAngka[] = "0123456789";
+char cAngka[] = "0123456789";
     char cOperator[] = "+-/%*";
     char cSpace[] = "()";
     char chr[1];
@@ -55,3 +58,8 @@ void Separating(string _input)
     cout << data << endl;
 }
 
+int main(){
+    string input;
+    getline(cin, input);
+    Separating(input);
+}
